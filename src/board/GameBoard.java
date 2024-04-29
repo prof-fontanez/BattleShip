@@ -1,7 +1,9 @@
 package board;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 /**
  * A simple prototype as to what a Battle Ship game will look like using a {@link java.util.Map} to store the coordinates
@@ -117,10 +119,16 @@ public class GameBoard {
      * Initializes the grid for a new game.
      */
     private void clearGrid() {
-        for (int i = 0; i < 10; i++)
-            for (int j = 0; j < 10; j++)
-                matrix[i][j] = '.';
+        Arrays.stream(matrix).forEach(row -> {
+            IntStream.range(0, 10).forEach(col -> row[col] = '.');
+        });
     }
+
+//    private void clearGrid() {
+//        for (int i = 0; i < 10; i++)
+//            for (int j = 0; j < 10; j++)
+//                matrix[i][j] = '.';
+//    }
 
     public static void main(String[] args) {
         GameBoard grid = new GameBoard();
@@ -138,5 +146,6 @@ public class GameBoard {
         grid.move(new Coordinates(2, 3));
         grid.move(new Coordinates(2, 4));
         grid.move(new Coordinates(2, 5));
+        grid.initializeGrid();
     }
 }
