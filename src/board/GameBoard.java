@@ -14,7 +14,7 @@ public class GameBoard {
 
     public void setPieceCoordiates(Ship ship, Coordinates coordinates) {
         if (gamePieceMap.containsKey(coordinates)) {
-            System.err.println("Point already taken by another ship. Try another set of coordinates");
+            System.out.println("Point already taken by another ship. Try another set of coordinates");
             return;
         }
         gamePieceMap.put(coordinates, ship);
@@ -43,20 +43,25 @@ public class GameBoard {
     }
 
     public void move(Coordinates coordinates) {
-        String coordStr = "coordinates (" + coordinates.row() + ", " + coordinates.col() + ")";
         int col = coordinates.col();
         int row = coordinates.row();
-        Ship ship = null;
-        if (gamePieceMap.containsKey(coordinates)) {
-            System.out.println(coordStr + " is a hit!");
-            ship = gamePieceMap.remove(coordinates);
-            matrix[row][col] = '*';
-        } else {
+        String coordStr = "coordinates (" + row + ", " + col + ")";
+
+        if (!gamePieceMap.containsKey(coordinates)) {
             System.out.println(coordStr + " is a miss.");
             return;
         }
+
+        System.out.println(coordStr + " is a hit!");
+        Ship ship = gamePieceMap.remove(coordinates);
+        matrix[row][col] = '*';
+
         if (!gamePieceMap.containsValue(ship)) {
-            System.err.println("You sunk a battleship!");
+            System.out.println("You sunk a battleship!");
+        }
+
+        if (gamePieceMap.isEmpty()) {
+            System.out.println("You win! Game over.");
         }
         printGrid();
     }
@@ -89,5 +94,8 @@ public class GameBoard {
         grid.move(new Coordinates(1,0));
         grid.move(new Coordinates(0,0));
         grid.move(new Coordinates(3,0));
+        grid.move(new Coordinates(2, 3));
+        grid.move(new Coordinates(2, 4));
+        grid.move(new Coordinates(2, 5));
     }
 }
