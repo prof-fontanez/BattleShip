@@ -146,6 +146,5 @@ public class GameBoard {
         grid.move(new Coordinates(2, 3));
         grid.move(new Coordinates(2, 4));
         grid.move(new Coordinates(2, 5));
-        grid.initializeGrid();
     }
 }
