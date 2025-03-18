@@ -85,6 +85,7 @@ public class GameBoard {
 
         if (!gamePieceMap.containsKey(coordinates)) {
             System.out.println(coordStr + " is a miss.");
+            matrix[row][col] = 'o';
             return;
         }
 
@@ -124,12 +125,6 @@ public class GameBoard {
         });
     }
 
-//    private void clearGrid() {
-//        for (int i = 0; i < 10; i++)
-//            for (int j = 0; j < 10; j++)
-//                matrix[i][j] = '.';
-//    }
-
     public static void main(String[] args) {
         GameBoard grid = new GameBoard();
         grid.newGame();
@@ -138,7 +133,10 @@ public class GameBoard {
         grid.setPieceCoordiates(ship1, new Coordinates(0,0));
         grid.setPieceCoordiates(ship2, new Coordinates(2,3));
         grid.printGrid();
+        grid.move(new Coordinates(0,1));
         grid.move(new Coordinates(1,1));
+        grid.move(new Coordinates(2,1));
+        grid.move(new Coordinates(3,1));
         grid.move(new Coordinates(2,0));
         grid.move(new Coordinates(1,0));
         grid.move(new Coordinates(0,0));
