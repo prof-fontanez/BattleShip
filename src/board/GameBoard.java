@@ -120,9 +120,7 @@ public class GameBoard {
      * Initializes the grid for a new game.
      */
     private void clearGrid() {
-        Arrays.stream(matrix).forEach(row -> {
-            IntStream.range(0, 10).forEach(col -> row[col] = '.');
-        });
+        Arrays.stream(matrix).forEach(row -> IntStream.range(0, 10).forEach(col -> row[col] = '.'));
     }
 
     public static void main(String[] args) {
