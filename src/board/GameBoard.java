@@ -9,7 +9,7 @@ import java.util.stream.IntStream;
  * A simple prototype as to what a Battle Ship game will look like using a {@link java.util.Map} to store the coordinates
  * for the game pieces (ships).
  * <p/>
- * This code doesn't do detail error checking and it only has structures in place for one set of pieces. A real game will
+ * This code doesn't do detail error checking, and it only has structures in place for one set of pieces. A real game will
  * require two game boards, where players will call shots on the opponent's board. This means that there needs to be a
  * game controller class to restrict access to an opponent being able to see his opponent's board. The game manager will
  * receive both players' inputs (coordinates) to set the pieces on the board, and the coordinates when a move is made.
@@ -19,8 +19,8 @@ import java.util.stream.IntStream;
  * Additionally, this prototype lacks controls to keep starting new games, or to terminate a game session.
  */
 public class GameBoard {
-    private Map<Coordinates, Ship> gamePieceMap = new HashMap<>();
-    private char[][] matrix = new char[10][10];
+    private final Map<Coordinates, Ship> gamePieceMap = new HashMap<>();
+    private final char[][] matrix = new char[10][10];
 
     /**
      * As the method name implies, to be called to start a new game.
@@ -41,7 +41,7 @@ public class GameBoard {
      * @param ship The game piece
      * @param coordinates The coordinates of the HEAD of the piece.
      */
-    public void setPieceCoordiates(Ship ship, Coordinates coordinates) {
+    public void setPieceCoordinates(Ship ship, Coordinates coordinates) {
         if (gamePieceMap.containsKey(coordinates)) {
             System.out.println("Point already taken by another ship. Try another set of coordinates");
             return;
@@ -130,8 +130,8 @@ public class GameBoard {
         grid.newGame();
         Ship ship1 = new Ship(1, 4, Orientation.V);
         Ship ship2 = new Ship(2, 3, Orientation.H);
-        grid.setPieceCoordiates(ship1, new Coordinates(0,0));
-        grid.setPieceCoordiates(ship2, new Coordinates(2,3));
+        grid.setPieceCoordinates(ship1, new Coordinates(0,0));
+        grid.setPieceCoordinates(ship2, new Coordinates(2,3));
         grid.printGrid();
         grid.move(new Coordinates(0,1));
         grid.move(new Coordinates(1,1));
