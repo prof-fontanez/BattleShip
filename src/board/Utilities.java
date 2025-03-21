@@ -24,7 +24,7 @@ public class Utilities {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        int col = generateRandomNumber(1, 9);
+        int col = generateRandomNumber(0, 9);
         return new Coordinates(row, col);
     }
 
