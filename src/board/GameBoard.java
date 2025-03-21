@@ -100,7 +100,7 @@ public class GameBoard {
         printGrid();
     }
 
-    public boolean evauateBoard() {
+    public boolean evaluateBoard() {
         boolean gameOver = gamePieceMap.isEmpty();
         if (gameOver) {
             System.out.println("You win! Game over.");
@@ -137,6 +137,7 @@ public class GameBoard {
         Arrays.stream(matrix).forEach(row -> IntStream.range(0, 10).forEach(col -> row[col] = '.'));
     }
 
+    @SuppressWarnings("BusyWait")
     public static void main(String[] args) {
         GameBoard grid = new GameBoard();
         grid.newGame();
@@ -158,6 +159,6 @@ public class GameBoard {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-        } while (!grid.evauateBoard());
+        } while (!grid.evaluateBoard());
     }
 }

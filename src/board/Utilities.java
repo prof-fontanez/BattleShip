@@ -1,6 +1,5 @@
 package board;
 
-import java.util.Arrays;
 import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
@@ -16,7 +15,8 @@ public class Utilities {
         return random.nextInt(upperBound - lowerBound + 1) + lowerBound;
     }
 
-    public static Coordinates createRandomCoordinate() {
+    @SuppressWarnings("unused")
+    public static Coordinates createRandomCoordinates() {
 
         int row = generateRandomNumber(0, 9);
         try {
