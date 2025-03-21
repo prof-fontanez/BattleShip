@@ -20,6 +20,7 @@ import java.util.stream.IntStream;
  */
 public class GameBoard {
     private final Map<Coordinates, Ship> gamePieceMap = new HashMap<>();
+    private static final Map<Integer, Coordinates> shots = new HashMap<>();
     private final char[][] matrix = new char[10][10];
 
     /**
@@ -96,11 +97,24 @@ public class GameBoard {
         if (!gamePieceMap.containsValue(ship)) {
             System.out.println("You sunk a battleship!");
         }
+        printGrid();
+    }
 
-        if (gamePieceMap.isEmpty()) {
+    public boolean evauateBoard() {
+        boolean gameOver = gamePieceMap.isEmpty();
+        if (gameOver) {
             System.out.println("You win! Game over.");
         }
-        printGrid();
+        return gameOver;
+    }
+
+    public void generateShots () {
+        int key = 1;
+        for (int i=0; i < 10; i++) {
+            for(int j=0; j < 10; j++) {
+                shots.put(key++, new Coordinates(i, j));
+            }
+        }
     }
 
     /**
@@ -131,16 +145,19 @@ public class GameBoard {
         grid.setPieceCoordinates(ship1, new Coordinates(0,0));
         grid.setPieceCoordinates(ship2, new Coordinates(2,3));
         grid.printGrid();
-        grid.move(new Coordinates(0,1));
-        grid.move(new Coordinates(1,1));
-        grid.move(new Coordinates(2,1));
-        grid.move(new Coordinates(3,1));
-        grid.move(new Coordinates(2,0));
-        grid.move(new Coordinates(1,0));
-        grid.move(new Coordinates(0,0));
-        grid.move(new Coordinates(3,0));
-        grid.move(new Coordinates(2, 3));
-        grid.move(new Coordinates(2, 4));
-        grid.move(new Coordinates(2, 5));
+        grid.generateShots();
+
+        do {
+            Coordinates shot = shots.remove(Utilities.generateRandomNumber(1, 100));
+            if(shot == null) {
+                continue;
+            }
+            grid.move(shot);
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        } while (!grid.evauateBoard());
     }
 }
