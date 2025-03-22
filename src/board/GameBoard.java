@@ -42,10 +42,10 @@ public class GameBoard {
      * @param ship The game piece
      * @param coordinates The coordinates of the HEAD of the piece.
      */
-    public void setPieceCoordinates(Ship ship, Coordinates coordinates) {
+    public void placeShipOnBoard(Ship ship, Coordinates coordinates) {
         if (gamePieceMap.containsKey(coordinates)) {
-            System.out.println("Point already taken by another ship. Try another set of coordinates");
-            return;
+            System.out.println(coordinates + " of ship ID " + ship.id() + " already taken by another ship. Try another set of coordinates");
+            System.exit(-1);
         }
         gamePieceMap.put(coordinates, ship);
         int size = ship.size();
@@ -143,8 +143,9 @@ public class GameBoard {
         grid.newGame();
         Ship ship1 = new Ship(1, 4, Orientation.V);
         Ship ship2 = new Ship(2, 3, Orientation.H);
-        grid.setPieceCoordinates(ship1, new Coordinates(0,0));
-        grid.setPieceCoordinates(ship2, new Coordinates(2,3));
+        grid.placeShipOnBoard(ship1, new Coordinates(0,0));
+        grid.placeShipOnBoard(ship2, new Coordinates(2,3));
+
         grid.printGrid();
         grid.generateShots();
 
