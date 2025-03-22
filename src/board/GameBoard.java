@@ -58,6 +58,10 @@ public class GameBoard {
             case V -> {
                 for (int i = 0; i < size - 1; i++) {
                     Coordinates newCoord = new Coordinates(++row, col);
+                    if (gamePieceMap.containsKey(newCoord)) {
+                        System.out.println(newCoord + " of ship ID " + ship.id() + " already taken by another ship. Try another set of coordinates");
+                        System.exit(-1);
+                    }
                     gamePieceMap.put(newCoord, ship);
                     matrix[row][col] = (char)(ship.id()+'0');
                 }
@@ -65,6 +69,10 @@ public class GameBoard {
             case H -> {
                 for (int i = 0; i < size - 1; i++) {
                     Coordinates newCoord = new Coordinates(row, ++col);
+                    if (gamePieceMap.containsKey(newCoord)) {
+                        System.out.println(newCoord + " of ship ID " + ship.id() + " already taken by another ship. Try another set of coordinates");
+                        System.exit(-1);
+                    }
                     gamePieceMap.put(newCoord, ship);
                     matrix[row][col] = (char)(ship.id()+'0');
                 }
