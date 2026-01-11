@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.stream.IntStream;
 
 /**
- * A simple prototype as to what a Battle Ship game will look like using a {@link java.util.Map} to store the coordinates
+ * A simple prototype as to what a Battle GamePiece game will look like using a {@link java.util.Map} to store the coordinates
  * for the game pieces (ships).
  * <p/>
  * This code doesn't do detail error checking, and it only has structures in place for one set of pieces. A real game will
@@ -19,7 +19,7 @@ import java.util.stream.IntStream;
  * Additionally, this prototype lacks controls to keep starting new games, or to terminate a game session.
  */
 public class GameBoard {
-    private final Map<Coordinates, Ship> gamePieceMap = new HashMap<>();
+    private final Map<Coordinates, GamePiece> gamePieceMap = new HashMap<>();
     private static final Map<Integer, Coordinates> shots = new HashMap<>();
     private final char[][] matrix = new char[10][10];
 
@@ -42,14 +42,10 @@ public class GameBoard {
      * @param ship The game piece
      * @param coordinates The coordinates of the HEAD of the piece.
      */
-    public void placeShipOnBoard(Ship ship, Coordinates coordinates) {
-        if (gamePieceMap.containsKey(coordinates)) {
-            System.out.println(coordinates + " of ship ID " + ship.id() + " already taken by another ship. Try another set of coordinates");
-            System.exit(-1);
-        }
+    public void placeShipOnBoard(GamePiece ship, Coordinates coordinates, Orientation orientation) {
+        verifyPiecePlacement(coordinates, ship);
         gamePieceMap.put(coordinates, ship);
-        int size = ship.size();
-        Orientation orientation = ship.orientation();
+        int size = ship.type().getSize();
         int row = coordinates.row();
         int col = coordinates.col();
 
@@ -58,10 +54,7 @@ public class GameBoard {
             case V -> {
                 for (int i = 0; i < size - 1; i++) {
                     Coordinates newCoord = new Coordinates(++row, col);
-                    if (gamePieceMap.containsKey(newCoord)) {
-                        System.out.println(newCoord + " of ship ID " + ship.id() + " already taken by another ship. Try another set of coordinates");
-                        System.exit(-1);
-                    }
+                    verifyPiecePlacement(newCoord, ship);
                     gamePieceMap.put(newCoord, ship);
                     matrix[row][col] = (char)(ship.id()+'0');
                 }
@@ -69,10 +62,7 @@ public class GameBoard {
             case H -> {
                 for (int i = 0; i < size - 1; i++) {
                     Coordinates newCoord = new Coordinates(row, ++col);
-                    if (gamePieceMap.containsKey(newCoord)) {
-                        System.out.println(newCoord + " of ship ID " + ship.id() + " already taken by another ship. Try another set of coordinates");
-                        System.exit(-1);
-                    }
+                    verifyPiecePlacement(newCoord, ship);
                     gamePieceMap.put(newCoord, ship);
                     matrix[row][col] = (char)(ship.id()+'0');
                 }
@@ -99,7 +89,7 @@ public class GameBoard {
         }
 
         System.out.println(coordStr + " is a hit!");
-        Ship ship = gamePieceMap.remove(coordinates);
+        GamePiece ship = gamePieceMap.remove(coordinates);
         matrix[row][col] = '*';
 
         if (!gamePieceMap.containsValue(ship)) {
@@ -145,16 +135,38 @@ public class GameBoard {
         Arrays.stream(matrix).forEach(row -> IntStream.range(0, 10).forEach(col -> row[col] = '.'));
     }
 
+    private void verifyPiecePlacement(Coordinates coordinates, GamePiece ship) {
+        if (gamePieceMap.containsKey(coordinates)) {
+            System.out.println(coordinates + " of ship ID " + ship.id() + " already taken by another ship. Try another set of coordinates");
+            System.exit(-1);
+        }
+
+    }
+
     @SuppressWarnings("BusyWait")
     public static void main(String[] args) {
+        // Create a new game board (emtpy)
         GameBoard grid = new GameBoard();
         grid.newGame();
-        Ship ship1 = new Ship(1, 4, Orientation.V);
-        Ship ship2 = new Ship(2, 3, Orientation.H);
-        grid.placeShipOnBoard(ship1, new Coordinates(0,0));
-        grid.placeShipOnBoard(ship2, new Coordinates(2,3));
 
+        //Create the game pieces
+        GamePiece battleship = new GamePiece(1, ShipType.BATTLESHIP);
+        GamePiece carrier = new GamePiece(2, ShipType.CARRIER);
+        GamePiece submarine = new GamePiece(3, ShipType.SUBMARINE);
+        GamePiece cruiser = new GamePiece(4, ShipType.CRUISER);
+        GamePiece destroyer = new GamePiece(5, ShipType.DESTROYER);
+
+        // Place the game pieces on the board
+        grid.placeShipOnBoard(battleship, new Coordinates(0,0), Orientation.V);
+        grid.placeShipOnBoard(carrier, new Coordinates(2,3), Orientation.H);
+        grid.placeShipOnBoard(submarine, new Coordinates(3,8), Orientation.V);
+        grid.placeShipOnBoard(cruiser, new Coordinates(5,5), Orientation.H);
+        grid.placeShipOnBoard(destroyer, new Coordinates(8,8), Orientation.H);
+
+        // Refresh the grid (screen) to see the game placed game pieces
         grid.printGrid();
+
+        // Start the simulated game
         grid.generateShots();
 
         do {
