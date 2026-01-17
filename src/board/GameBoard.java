@@ -80,7 +80,10 @@ public class GameBoard {
     public void move(Coordinates coordinates) {
         int col = coordinates.col();
         int row = coordinates.row();
-        String coordStr = "coordinates (" + row + ", " + col + ")";
+
+        String letterCoord = LetterCoord.getLetterValue(row).toString();
+
+        String coordStr = "coordinates " + letterCoord + (col+1);
 
         if (!gamePieceMap.containsKey(coordinates)) {
             System.out.println(coordStr + " is a miss.");
